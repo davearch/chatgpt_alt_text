@@ -1,0 +1,42 @@
+id: images
+uuid: a0bba36f-58c4-4b15-8bdd-141443c8dc92
+label: image_files
+migration_group: chatgpt_alt_text_group
+migration_tags:
+  - Image Files
+  - files
+source:
+  plugin: csv
+  path: modules/custom/chatgpt_alt_text/data/image_files.csv
+  ids: ['unique_id']
+  header_offset: 0
+  fields:
+    - name: 'unique_id'
+      label: 'id'
+    - name: 'filename'
+      label: 'section'
+    - name: 'uri'
+      label: 'uri'
+process:
+  fid: id
+  uuid:
+    plugin: service
+    service: uuid
+    method: generate
+  langcode:
+    plugin: default_value
+    default_value: und
+  uid:
+    plugin: default_value
+    default_value: 1
+  filename: filename
+  status:
+    plugin: default_value
+    default_value: 1
+  uri: uri
+destination:
+  plugin: entity:file
+dependencies:
+  enforced:
+    module:
+      - chatgpt_alt_text

@@ -1,0 +1,47 @@
+id: media_entities
+uuid: d8aa3fd3-c1cc-47ea-bb96-a4ab70495253
+label: media_entities
+migration_group: chatgpt_alt_text_group
+migration_tags:
+  - Media
+source:
+  plugin: csv
+  path: modules/custom/chatgpt_alt_text/data/image_files.csv
+  ids: ['unique_id']
+  header_offset: 0
+  fields:
+    - name: 'unique_id'
+      label: 'id'
+    - name: 'filename'
+      label: 'section'
+    - name: 'uri'
+      label: 'uri'
+destination:
+  plugin: 'entity:media'
+  default_bundle: 'image'
+  validate: true
+process:
+  name: filename
+  pseudo_target_id:
+    plugin: migration_lookup
+    migration: images
+    source: unique_id
+  field_media_image/target_id:
+    -
+      plugin: skip_on_empty
+      source: '@pseudo_target_id'
+      method: row
+  field_media_image/alt:
+    plugin: generate_alt_text
+    source: '@pseudo_target_id'
+  uid:
+    -
+      plugin: default_value
+      default_value: 1
+migration_dependencies:
+  required:
+    - images
+dependencies:
+  enforced:
+    module:
+      - chatgpt_alt_text

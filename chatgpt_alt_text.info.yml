@@ -1,0 +1,9 @@
+name: 'ChatGPT Alt Text'
+type: module
+description: 'use ChatGPT to generate alt text for images in migrations!!!'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - migrate
+  - migrate_plus
+  - ai
